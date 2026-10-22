@@ -377,8 +377,10 @@
   .flatpickr-days { padding: 0 6px 4px !important; width: auto !important; }
   .flatpickr-days .dayContainer { padding: 0 !important; }
   .flatpickr-weekdays { padding: 0 6px !important; }
+  /* Grid only while open. Forcing display on a closed calendar overrides flatpickr's
+     display:none, so the hidden popups keep their space and leave the page too tall. */
+  .flatpickr-calendar.hasTime.open { display: grid !important; }
   .flatpickr-calendar.hasTime {
-    display: grid !important;
     grid-template-columns: auto auto;
     grid-template-rows: auto auto;
     grid-template-areas: "months months" "days time";
@@ -739,6 +741,7 @@ var sp=document.getElementById('successPanel');
 if(quoteNumber){var qnP=sp.querySelector('.success-quote-num');if(qnP)qnP.textContent='Reference: '+quoteNumber;}
 sp.classList.add('active');document.getElementById('cardFooter').style.display='none';document.getElementById('submitError').style.display='none';
 document.querySelectorAll('.progress-step').forEach(function(s){s.classList.remove('active');s.classList.add('completed');});document.querySelectorAll('.progress-connector').forEach(function(c){c.classList.add('filled');});
+document.querySelector('.widget-wrapper').scrollIntoView({behavior:'smooth',block:'start'});
 }catch(err){
 btn.disabled=false;btn.innerHTML='Submit Quote Request <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>';
 errEl.style.display='block';
