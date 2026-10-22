@@ -102,10 +102,18 @@
   status = 301
   force = true
 
+# The driver application lives in Ops (one form, one submit contract). The hand-copied
+# page here sent no tenant_id, so every applicant got a 400 (2026-10-22).
 [[redirects]]
   from = "/driver-application.html"
-  to = "/driver-application"
-  status = 301
+  to = "https://ops.wernercoach.com/driver-application?t=00684b9c-54f0-46e0-b829-9e10ae4b7b90"
+  status = 302
+  force = true
+
+[[redirects]]
+  from = "/driver-application"
+  to = "https://ops.wernercoach.com/driver-application?t=00684b9c-54f0-46e0-b829-9e10ae4b7b90"
+  status = 302
   force = true
 
 [[redirects]]
