@@ -641,7 +641,15 @@ let autocompleteInstances={};let placesData={};let mapsLoaded=false;
 const WERNER_BASE_ADDRESS='144 Chester Ave, Phoenixville, PA 19460';
 let customerRouteDistance='—';let customerRouteDuration='—';let deadheadTotalDistance='—';let deadheadTotalDuration='—';let routeLegs=[];
 const GOOGLE_MAPS_API_KEY='AIzaSyA38IZTVw4Fx3mVEjGUWBeonyzCu_mFGi0';
-const BUS_SPEED_FACTOR=1.15;
+// Coaches drive slower than the cars Google times. Werner's bus_drive_time_factor (the setting
+// the Backbone Trip Calculator plans every drive with) comes from the public brand RPC; 1.15 is
+// the platform default, used until it lands or if the read fails. It never blocks the form, and
+// it never re-runs an estimate already shown (the review must match what the form submits).
+var BUS_SPEED_FACTOR=1.15;
+var BACKBONE_URL='https://dtazswxluhmdwwibgawn.supabase.co';
+var BACKBONE_PUBLISHABLE_KEY='sb_publishable_SZ2qeRp01NpXQJDtz2PhSg_necUfR2f'; // browser key (Ops config.js), safe to publish
+var WERNER_TENANT_ID='00684b9c-54f0-46e0-b829-9e10ae4b7b90';
+function loadBusFactor(){try{fetch(BACKBONE_URL+'/rest/v1/rpc/get_public_tenant_brand',{method:'POST',headers:{'Content-Type':'application/json',apikey:BACKBONE_PUBLISHABLE_KEY},body:JSON.stringify({p_tenant_id:WERNER_TENANT_ID})}).then(function(r){return r.ok?r.json():null;}).then(function(t){var f=parseFloat(t&&t.bus_drive_time_factor);if(isFinite(f)&&f>0&&f<=3)BUS_SPEED_FACTOR=f;}).catch(function(){});}catch(e){}}
 function roundTo15Min(totalSeconds){var totalMin=Math.round(totalSeconds/60);totalMin=Math.round(totalMin/15)*15;return totalMin*60;}
 function loadGoogleMaps(){if(GOOGLE_MAPS_API_KEY==='YOUR_API_KEY')return;const s=document.createElement('script');s.src='https://maps.googleapis.com/maps/api/js?key='+GOOGLE_MAPS_API_KEY+'&libraries=places&callback=initMaps';s.async=true;s.defer=true;document.head.appendChild(s);}
 const mapStyles=[{featureType:'poi',stylers:[{visibility:'off'}]},{featureType:'transit',stylers:[{visibility:'simplified'}]},{featureType:'water',stylers:[{color:'#c9daf8'}]}];
@@ -935,7 +943,7 @@ function initDatePickers(){
   }));
   fpReturn=flatpickr('#returnDate',common);
 }
-document.addEventListener('DOMContentLoaded',function(){loadGoogleMaps();initDatePickers();document.getElementById('phone').addEventListener('input',function(){var val=this.value.replace(/\D/g,'');if(val.length>=6)val='('+val.slice(0,3)+') '+val.slice(3,6)+'-'+val.slice(6,10);else if(val.length>=3)val='('+val.slice(0,3)+') '+val.slice(3);this.value=val;});document.addEventListener('change',function(e){if(e.target.classList.contains('location-input'))setTimeout(updateRoute,300);});document.getElementById('passengers').addEventListener('input',checkVehicleCapacity);});
+document.addEventListener('DOMContentLoaded',function(){loadBusFactor();loadGoogleMaps();initDatePickers();document.getElementById('phone').addEventListener('input',function(){var val=this.value.replace(/\D/g,'');if(val.length>=6)val='('+val.slice(0,3)+') '+val.slice(3,6)+'-'+val.slice(6,10);else if(val.length>=3)val='('+val.slice(0,3)+') '+val.slice(3);this.value=val;});document.addEventListener('change',function(e){if(e.target.classList.contains('location-input'))setTimeout(updateRoute,300);});document.getElementById('passengers').addEventListener('input',checkVehicleCapacity);});
 </script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.js"></script>
 <script>if(typeof flatpickr!=='undefined'&&typeof initDatePickers==='function')initDatePickers();</script>
