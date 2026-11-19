@@ -595,6 +595,62 @@
     .float-bar-quote{flex:2;text-align:center;padding:13px 8px;background:linear-gradient(145deg,#d4b577 0%,#B8965A 50%,#a6843e 100%);border-radius:28px;color:var(--navy)!important;font-size:.98rem;font-weight:700;letter-spacing:.5px;text-transform:uppercase;position:relative;overflow:hidden;box-shadow:0 2px 10px rgba(184,150,90,.3),inset 0 1px 0 rgba(255,255,255,.2);white-space:nowrap}
     .float-bar-quote::before{content:'';position:absolute;top:0;left:-100%;width:50%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.25),transparent);animation:nav-shimmer 3.5s ease-in-out infinite}
 
+    /* ── HOW IT WORKS ── seven-step click-through; scenes are drawn by /js/how-it-works.js */
+    .hiw-card{max-width:clamp(420px,calc((100vh - 330px)*1.667),940px);margin:0 auto;background:var(--white);border:1px solid var(--cream2);border-radius:18px;box-shadow:0 10px 40px rgba(11,29,58,.08);overflow:hidden}
+    .hiw-stage{background:#e4ecf5;line-height:0}
+    .hiw-svg{display:block;width:100%;height:auto;font-family:'Source Sans 3',system-ui,sans-serif}
+    .hiw-cap{padding:26px 40px 6px;text-align:center;min-height:138px}
+    .hiw-count{font-size:.68rem;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#7d6129;margin-bottom:6px}
+    .hiw-name{font-family:'Playfair Display',Georgia,serif;font-size:1.7rem;font-weight:700;color:var(--navy);line-height:1.2;margin-bottom:8px}
+    .hiw-text{font-size:1.06rem;color:var(--text);line-height:1.5;max-width:620px;margin:0 auto}
+    .hiw-nav{display:grid;grid-template-columns:132px 1fr 132px;align-items:start;gap:12px;padding:10px 28px 28px}
+    .hiw-btn{min-height:48px;padding:0 20px;border-radius:28px;border:1px solid var(--navy);background:var(--white);color:var(--navy);font:600 .95rem/1 'Source Sans 3',system-ui,sans-serif;letter-spacing:.3px;cursor:pointer;transition:background .2s ease,color .2s ease,opacity .2s ease;white-space:nowrap}
+    .hiw-next{background:var(--navy);color:var(--white);grid-column:3}
+    .hiw-back{grid-column:1}
+    .hiw-btn[aria-disabled="true"]{opacity:.4;cursor:default}
+    .hiw-quote{grid-column:3;min-height:48px;padding:0 12px;display:inline-flex;align-items:center;justify-content:center;font-size:.95rem;white-space:nowrap}
+    .hiw-quote[hidden],.hiw-btn[hidden]{display:none}
+    .hiw-quote,.hiw-quote:hover{color:var(--navy)}
+    .hiw-dots{--hiw-fill:0;grid-column:2;grid-row:1;list-style:none;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));position:relative;max-width:560px;width:100%;margin:0 auto}
+    .hiw-dots::before,.hiw-dots::after{content:'';position:absolute;top:23px;left:calc(100%/14);width:calc(100% - 100%/7);height:2px;background:var(--cream2);border-radius:2px}
+    .hiw-dots::after{background:var(--gold);transform-origin:left center;transform:scaleX(var(--hiw-fill));transition:transform .35s cubic-bezier(.22,.61,.36,1)}
+    .hiw-dots li{display:flex;justify-content:center;position:relative;z-index:1}
+    .hiw-dot{width:100%;min-height:48px;padding:0;border:none;background:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;font-family:inherit;color:var(--muted);border-radius:10px}
+    .hiw-dot-mark{width:14px;height:14px;margin-top:17px;border-radius:50%;background:var(--white);border:2px solid #857c6b;transition:transform .2s ease,background .2s ease,border-color .2s ease;flex:none}
+    .hiw-dot.is-done .hiw-dot-mark{background:var(--gold);border-color:var(--gold)}
+    .hiw-dot.is-on .hiw-dot-mark{background:var(--navy);border-color:var(--navy);transform:scale(1.35);box-shadow:0 0 0 4px rgba(184,150,90,.35)}
+    .hiw-dot-lbl{font-size:.72rem;font-weight:600;letter-spacing:.3px;margin-top:9px;line-height:1.2}
+    .hiw-dot.is-on .hiw-dot-lbl{color:var(--navy)}
+    .hiw-btn:focus-visible,.hiw-dot:focus-visible,.hiw-quote:focus-visible{outline:3px solid var(--navy);outline-offset:3px;box-shadow:0 0 0 3px var(--white)}
+    .hiw-list{list-style:decimal;padding:28px 32px 8px 56px;max-width:640px;margin:0 auto}
+    .hiw-list li{margin-bottom:10px}
+    .hiw-list strong{color:var(--navy);margin-right:6px}
+    .hiw-fallback{text-align:center;padding:8px 20px 28px}
+    @media (hover:hover) and (pointer:fine){
+      .hiw-back:hover:not([aria-disabled="true"]){background:var(--cream)}
+      .hiw-next:hover{background:var(--navy-l)}
+      .hiw-dot:hover .hiw-dot-mark{border-color:var(--navy)}
+    }
+    @media(max-width:768px){
+      .hiw-card{border-radius:14px;margin:0 -8px}
+      .hiw-cap{padding:20px 20px 4px;min-height:150px}
+      .hiw-name{font-size:1.45rem}
+      .hiw-text{font-size:1rem}
+      .hiw-nav{grid-template-columns:1fr 1fr;padding:4px 16px 20px;gap:10px}
+      .hiw-dots{grid-column:1/-1;grid-row:1;max-width:340px}
+      .hiw-back{grid-column:1;grid-row:2}
+      .hiw-next,.hiw-quote{grid-column:2;grid-row:2}
+      .hiw-dot-lbl{display:none}
+    }
+    /* short windows: the card narrows to keep scene and buttons on one screen, so the dot labels give way */
+    @media(max-height:790px){
+      .hiw-dot-lbl{display:none}
+    }
+    @media(max-width:360px){
+      .hiw-nav{padding:4px 4px 20px}
+      .hiw-cap{min-height:158px}
+    }
+
     /* ── HOVER-ONLY EFFECTS ──
        v3: All transform/scale/shadow-lift hovers live here so they don't fire on
        touch devices (where the press triggers them and they STICK until the user
@@ -1076,6 +1132,54 @@
       </div>
     </div>
   </section>
+
+  <!-- HOW IT WORKS: seven-step click-through of a charter trip. Scenes: /js/how-it-works.js.
+       Without JavaScript the numbered list below is the whole section. -->
+  <section class="sec sec-cream" id="how-it-works" aria-labelledby="hiwTitle">
+    <div class="wrap">
+      <div class="sec-hd fade-up">
+        <p class="eye">How It Works</p>
+        <h2 class="sec-t" id="hiwTitle">Your Trip, Start to Finish</h2>
+        <p class="sec-sub">Seven quick stops show what a day with Werner Coach looks like.</p>
+      </div>
+      <noscript><style>#how-it-works .fade-up{opacity:1;transform:none}</style></noscript>
+      <div class="hiw-card fade-up" id="hiwPlayer">
+        <ol class="hiw-list">
+          <li><strong>Depot</strong> <span>Your coach starts the day clean, fueled and ready at our Phoenixville garage.</span></li>
+          <li><strong>Pickup</strong> <span>Your driver meets your group right where you asked.</span></li>
+          <li><strong>Boarding</strong> <span>Bags go underneath, everyone climbs aboard and finds a seat.</span></li>
+          <li><strong>Destination</strong> <span>Sit back and relax. We drop you right at the door.</span></li>
+          <li><strong>Fun</strong> <span>Enjoy the day. Your coach is waiting when you are ready.</span></li>
+          <li><strong>Return</strong> <span>When the fun wraps up, everyone settles in for the ride back.</span></li>
+          <li><strong>Home</strong> <span>Home safe, right back where you started. Ready to plan your trip?</span></li>
+        </ol>
+        <p class="hiw-fallback"><a href="/quote-widget" class="btn btn-navy">Get a quote</a></p>
+        <div class="hiw-ui" role="group" aria-roledescription="carousel" aria-label="How a charter trip works, seven steps" hidden>
+          <div class="hiw-stage">
+            <svg class="hiw-svg" viewBox="0 0 900 540" aria-hidden="true" focusable="false">
+              <defs>
+                <linearGradient id="hiwDusk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2c3a68"/><stop offset=".5" stop-color="#8f7fa3"/><stop offset=".82" stop-color="#f1c9a2"/></linearGradient>
+                <linearGradient id="hiwNight" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#14204a"/><stop offset=".55" stop-color="#4d5688"/><stop offset=".85" stop-color="#c79a8f"/></linearGradient>
+              </defs>
+              <g id="hiwScene"></g>
+            </svg>
+          </div>
+          <div class="hiw-cap" aria-live="polite" aria-atomic="true">
+            <p class="hiw-count">Step 1 of 7</p>
+            <h3 class="hiw-name">Depot</h3>
+            <p class="hiw-text"></p>
+          </div>
+          <div class="hiw-nav">
+            <button type="button" class="hiw-btn hiw-back">&larr; Back</button>
+            <ol class="hiw-dots" aria-label="Steps"></ol>
+            <button type="button" class="hiw-btn hiw-next">Next &rarr;</button>
+            <a href="/quote-widget" class="btn btn-gold hiw-quote" hidden>Get a quote</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <script src="/js/how-it-works.js" defer></script>
 
   <!-- PHOTO STRIP -->
   <div class="photo-strip">
